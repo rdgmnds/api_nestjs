@@ -7,6 +7,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
+  binaryTargets = "debian-openssl-3.0.x"
 }
 
 datasource db {
@@ -15,7 +16,7 @@ datasource db {
 }
 
 model Employee {
-  id  Int   @id @default(autoincrement())
+  id  String   @id @default(uuid())
   name  String
   age Int
   occupation  Occupation
@@ -27,6 +28,48 @@ enum Occupation {
   Programador
   Técnico
   Suporte
+}
+
+model Category {
+  id String @id @default(uuid())
+  name String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+}
+
+model Product {
+  id String @id @default(uuid())
+  name String
+  price Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Category @relation(fields: [category_id], references: [id])
+
+  category_id String
+}
+
+model Customer {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  phone String @unique
+  location String
+
+  orders Order[]
+}
+
+model Order {
+  id String @id @default(uuid())
+  product String
+  price Float
+  category String
+
+  customer Customer @relation(fields: [customer_id], references: [id])
+
+  customer_id String
 }
 
 // migrate: npx prisma generate E npx prisma migrate dev --name nome_migrate
