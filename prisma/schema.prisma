@@ -15,26 +15,25 @@ datasource db {
   url  	    = env("DATABASE_URL")
 }
 
-model Employee {
-  id  String   @id @default(uuid())
-  name  String
-  age Int
-  occupation  Occupation
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  sectorId String @unique
+  sector Sector @relation(fields: [sectorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-enum Occupation {
-  Programador
-  Técnico
-  Suporte
+model Sector {
+  id String @id @default(uuid())
+  name String
+  users User[] 
 }
 
 model Category {
   id String @id @default(uuid())
   name String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
   products Product[]
 }
 
@@ -44,8 +43,6 @@ model Product {
   price Float
   categoryId String @unique
   category Category @relation(fields: [categoryId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Customer {
@@ -54,13 +51,15 @@ model Customer {
   email String @unique
   phone String @unique
   location String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   orders Order[]
 }
 
 model Order {
   id String @id @default(uuid())
   product String
-  price Float
+  price Float 
   category String
   customerId String @unique
   customer Customer @relation(fields: [customerId], references: [id])

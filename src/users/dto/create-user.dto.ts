@@ -1,17 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-import { IsNumber, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { IsString, IsEmail, MinLength } from "class-validator";
 
 export class CreateUserDto {
     @IsString()
-    @IsNotEmpty()
+    @MinLength(5)
     name: string;
 
-    @IsNumber()
-    age: number;
+    @IsEmail()
+    email: string;
 
-    @IsEnum(["Programador", "Técnico", "Suporte"], {
-        message: "Campo obrigatório"
-    })
-    occupation: "Programador" | "Técnico" | "Suporte";
+    @IsString()
+    sector: string;
 }
