@@ -5,7 +5,6 @@ import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { MyLoggerModule } from './my-logger/my-logger.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CustomersModule } from './customers/customers.module';
@@ -25,7 +24,6 @@ import { OrdersModule } from './orders/orders.module';
       ttl: 60000,
       limit: 100,
     }]),
-    MyLoggerModule,
     ProductsModule,
     CategoriesModule,
     CustomersModule,
