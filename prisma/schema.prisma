@@ -35,7 +35,6 @@ model Category {
   name String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   products Product[]
 }
 
@@ -43,12 +42,10 @@ model Product {
   id String @id @default(uuid())
   name String
   price Float
+  categoryId String @unique
+  category Category @relation(fields: [categoryId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  category Category @relation(fields: [category_id], references: [id])
-
-  category_id String
 }
 
 model Customer {
@@ -57,7 +54,6 @@ model Customer {
   email String @unique
   phone String @unique
   location String
-
   orders Order[]
 }
 
@@ -66,10 +62,8 @@ model Order {
   product String
   price Float
   category String
-
-  customer Customer @relation(fields: [customer_id], references: [id])
-
-  customer_id String
+  customerId String @unique
+  customer Customer @relation(fields: [customerId], references: [id])
 }
 
 // migrate: npx prisma generate E npx prisma migrate dev --name nome_migrate
