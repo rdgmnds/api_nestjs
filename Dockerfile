@@ -1,12 +1,32 @@
 # Etapa 1: build
-FROM node:22
+FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
 
+# Instalar dependências do sistema necessárias para Prisma
+RUN apk add --no-cache openssl
+
+COPY package*.json ./
+RUN npm ci
+COPY . .
 RUN npm run build
 
-# Porta usada pelo Nest (default 3000)
+# Etapa 2: runtime
+FROM node:20-alpine AS production
+WORKDIR /app
+
+RUN apk add --no-cache openssl
+
+# Copiar apenas o necessário para produção
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/dist ./dist
+COPY prisma ./prisma
+
+# Prisma precisa do client gerado
+RUN npx prisma generate
+
+# Porta padrão do Nest
 EXPOSE 3000
-CMD ["node", "dist/main"]
+
+CMD ["node", "dist/main.js"]

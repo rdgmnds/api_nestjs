@@ -9,6 +9,7 @@ import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { CustomersModule } from './customers/customers.module';
 import { OrdersModule } from './orders/orders.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { OrdersModule } from './orders/orders.module';
     ProductsModule,
     CategoriesModule,
     CustomersModule,
-    OrdersModule // limitar taxa de requisições
+    OrdersModule, // limitar taxa de requisições
+    ConfigModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService, {
